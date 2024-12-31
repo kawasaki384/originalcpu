@@ -2,3 +2,5 @@ venv
 Makefile
 *.o
 vscode
+capsella16
+*.bin
