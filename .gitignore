@@ -1,6 +1,6 @@
 venv
 Makefile
 *.o
-vscode
+.vscode
 capsella16
 *.bin
