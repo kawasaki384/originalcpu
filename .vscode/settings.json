@@ -1,0 +1,9 @@
+{
+    "C_Cpp.errorSquiggles": "disabled",
+    "files.associations": {
+        "stat.h": "c",
+        "functional": "c",
+        "sdl_main.h": "c",
+        "sdl.h": "c"
+    }
+}

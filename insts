@@ -1,0 +1,41 @@
+*命令についてそれぞれ記述した
+*一番目のRはR0,2番目のRはR1,3番目のIはI2というように表現する。
+
+*TYPE R (opcode:4bit r0:5bit r1:5bit r2:5bit space:13bit)
+*R0にR1とR2の比較結果を格納する
+SLT 0b00000 R R R
+*R0にR1+R2を格納する
+ADD 0b00001 R R R
+*R0にR1*R2を格納する
+MUL 0b00010 R R R
+*R0にR1-R2を格納する
+SUB 0b00011 R R R
+*R0にR1&R2を格納する
+AND 0b00100 R R R
+*R0にR1|R2を格納する
+OR 0b00101 R R R
+*R0にR1^R2を格納する
+XOR 0b00110 R R R
+
+*TYPE I (opcode:4bit r0:5bit r1:5bit I:16bit,space=2bit)
+*R0にR1+I2を格納する
+ADDI 0b00111 R R I
+*R0にR1-I2を格納する
+SUBI 0b01000 R R I
+
+*TYPE M (opcode:4bit r0:5bit r1:5bit M:16bit,space=2bit)
+*メモリのR1+M2の和のアドレスにR0の値を格納する
+SD 0b01001 R R M
+*R0に、メモリのR1とM2の和のアドレスの値を格納する
+LD 0b01010 R R M
+*R0に、programcounter+4の値を格納して、R1に格納されている値
+*とM2を加算して、最下位ビットを0にして、(4にalignment)、その結果をジャンプ先アドレスとしてジャンプする
+JAL 0b01011 R R M
+*if(R0==R1) pc=M2
+BEQ 0b01100 R R M
+*if(R0!=R1) pc=M2
+BNE 0b01101 R R M
+*R0=R1 << S(shamt)
+SLLI 0b01110 R R S
+*R0=R1 >> S(shamt)
+SRLI 0b01111 R R S

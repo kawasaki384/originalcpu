@@ -1,0 +1,97 @@
+//マンデルブロ集合を描くコードを書きたかった。
+//結局浮動小数点を実装しないとできるわけがありませんw
+
+#r0を移動
+ADDI r0,r0,i8
+SLLI r0,r0,s16
+ADDI r0,r0,i65535
+#半径**2をr1に格納
+ADDI r1,r1,i65535
+
+#ディスプレイの縦=横の長さをr2に格納
+ADDI r2,r2,i512
+
+#縦*横分続ける(r3はinnerloopのindex,r4はouterloopのindex)
+
+OUTERLOOP:
+
+#r3を0にする
+ADDI r3,r31,i0
+
+INNERLOOP:
+#LOOPの中身
+
+#r5 = r4*512+r3+r0
+
+#r5 = 0
+ADDI r5,r31,i0
+#r6 = 0
+ADDI r6,r31,i0
+
+#r5 = r4
+ADD r5,r5,r4
+
+#r5 *= 512
+ADDI r6,r6,i512
+MUL r5,r5,r6
+
+#r5 += r3
+ADD r5,r5,r3
+#r5 += r0
+ADD r5,r5,r0
+#r3 += 1
+ADDI r3,r3,i1
+#if(1): calculate()
+BEQ r31,r31,CALCULATE
+#r3 += 1
+ADDI r3,r3,i1
+#if(1): goto innerloop
+BEQ r31,r31,INNERLOOP
+
+OUTERLOOP_END:
+#外側LOOPの中身
+#r4 += 1
+ADDI r4,r4,i1
+#if r4 != 512 goto outerloop
+BNE r4,r2,OUTERLOOP
+
+CALCULATE:
+#r3,r4で、(r3-256,r4-256)という点を表現
+
+#r10 = r3-256
+SUBI r10,r3,i256
+#r11 = r4-256
+SUBI r11,r4,i256
+
+#r8は中心からの距離
+#r7 = r10*r10
+MUL r7,r10,r10
+#r8 = r7+0
+ADD r8,r7,r31
+#r7 = r11*r11
+MUL r7,r11,r11
+#r8 = r8+r7
+ADD r8,r8,r7
+#r9 = r8 > r1
+SLT r9,r8,r1
+#if r9 == 0 draw
+BEQ r9,r31,DRAW
+
+#if r3 != 512 goto innerloop
+BNE r3,r2,INNERLOOP
+
+DRAW:
+#r16 = 0
+ADDI r16,r31,i0
+#r16 = "blue"
+ADDI r16,r16,i255
+#mem[r5+m0] = r16
+SD r16,r5,m0
+#if r3 != 512 goto innerloop
+BNE r3,r2,INNERLOOP
+
+#if r4 != 512 goto outerloop
+BNE r4,r2,OUTERLOOP_END
+
+.END:
+BEQ r31,r31,.END
